@@ -326,13 +326,25 @@
             resultado
           );
 
-          if (resultado.success) {
+         if (resultado.success) {
 
-            alert(
-              "Conta Maribone criada com sucesso!"
-            );
+  // Guarda a identidade da conta criada
+  localStorage.setItem(
+    "maribone_id_usuario",
+    resultado.idUsuario
+  );
 
-            formulario.reset();
+  // Guarda o estado atual da assinatura
+  localStorage.setItem(
+    "maribone_status_assinatura",
+    resultado.status
+  );
+
+  // Vai para a página de planos
+  window.location.href =
+    "https://www.maribone.com.br/planos";
+
+}
 
           } else {
 
