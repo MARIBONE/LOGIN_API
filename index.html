@@ -100,6 +100,11 @@
       opacity: 0.9;
     }
 
+    button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
     .login {
       text-align: center;
       margin-top: 20px;
@@ -137,22 +142,21 @@
           type="text"
           id="nome"
           name="nome"
-          autocomplete="name"
+          autocomplete="given-name"
           required
         >
       </div>
 
-<div class="form-group">
+      <div class="form-group">
         <label for="sobrenome">Sobrenome</label>
         <input
           type="text"
           id="sobrenome"
           name="sobrenome"
-          autocomplete="surname"
+          autocomplete="family-name"
           required
         >
       </div>
-      
 
       <div class="form-group">
         <label for="email">E-mail</label>
@@ -188,13 +192,17 @@
       </div>
 
       <label class="terms">
-        <input type="checkbox" id="termos" required>
+        <input
+          type="checkbox"
+          id="termos"
+          required
+        >
         <span>
           Li e aceito os Termos de Uso e a Política de Privacidade.
         </span>
       </label>
 
-      <button type="submit">
+      <button type="submit" id="botaoCadastro">
         CRIAR CONTA MARIBONE
       </button>
 
@@ -202,112 +210,103 @@
 
     <div class="login">
       Já possui uma conta?
-      <a href="https://www.maribone.com.br/login">Entrar</a>
+      <a href="https://www.maribone.com.br/login">
+        Entrar
+      </a>
     </div>
 
   </main>
 
- ```html
-<script>
-  document
-    .getElementById("cadastroForm")
-    .addEventListener("submit", async function(event) {
+  <script>
+    document
+      .getElementById("cadastroForm")
+      .addEventListener("submit", async function(event) {
 
-      event.preventDefault();
+        event.preventDefault();
 
-      const nome =
-        document.getElementById("nome").value.trim();
+        const nome =
+          document.getElementById("nome").value.trim();
 
-      const sobrenome =
-        document.getElementById("sobrenome").value.trim();
+        const sobrenome =
+          document.getElementById("sobrenome").value.trim();
 
-      const email =
-        document.getElementById("email").value.trim();
+        const email =
+          document.getElementById("email").value.trim();
 
-      const senha =
-        document.getElementById("senha").value;
+        const senha =
+          document.getElementById("senha").value;
 
-      const confirmarSenha =
-        document.getElementById("confirmarSenha").value;
+        const confirmarSenha =
+          document.getElementById("confirmarSenha").value;
 
-      // Verifica as senhas
-      if (senha !== confirmarSenha) {
-        alert("As senhas não coincidem.");
-        return;
-      }
-
-      // Desativa o botão durante o cadastro
-      const botao =
-        event.target.querySelector("button");
-
-      botao.disabled = true;
-      botao.textContent = "CRIANDO CONTA...";
-
-      try {
-
-        const resposta = await fetch(
-          "https://api.maribone.com.br/auth/register",
-          {
-            method: "POST",
-
-            headers: {
-              "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-              nome: nome,
-              sobrenome: sobrenome,
-              email: email,
-              senha: senha
-            })
-          }
-        );
-
-        const resultado =
-          await resposta.json();
-
-        if (resultado.success) {
-
-          alert(
-            "Conta Maribone criada com sucesso!"
-          );
-
-          /*
-           * POR ENQUANTO NÃO REDIRECIONAMOS.
-           *
-           * Depois vamos colocar aqui a página
-           * de oferta dos planos.
-           */
-
-          event.target.reset();
-
-        } else {
-
-          alert(
-            resultado.error ||
-            "Não foi possível criar sua conta."
-          );
+        if (senha !== confirmarSenha) {
+          alert("As senhas não coincidem.");
+          return;
         }
 
-      } catch (erro) {
+        const botao =
+          document.getElementById("botaoCadastro");
 
-        console.error(erro);
+        botao.disabled = true;
+        botao.textContent = "CRIANDO CONTA...";
 
-        alert(
-          "Não foi possível conectar ao servidor. Tente novamente."
-        );
+        try {
 
-      } finally {
+          const resposta = await fetch(
+            "https://api.maribone.com.br/auth/register",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                nome: nome,
+                sobrenome: sobrenome,
+                email: email,
+                senha: senha
+              })
+            }
+          );
 
-        botao.disabled = false;
-        botao.textContent =
-          "CRIAR CONTA MARIBONE";
-      }
+          const resultado =
+            await resposta.json();
 
-    });
-</script>
-```
+          if (resultado.success) {
 
+            alert(
+              "Conta Maribone criada com sucesso!"
+            );
+
+            event.target.reset();
+
+          } else {
+
+            alert(
+              resultado.error ||
+              "Não foi possível criar sua conta."
+            );
+          }
+
+        } catch (erro) {
+
+          console.error(
+            "Erro no cadastro:",
+            erro
+          );
+
+          alert(
+            "Não foi possível conectar ao servidor. Tente novamente."
+          );
+
+        } finally {
+
+          botao.disabled = false;
+          botao.textContent =
+            "CRIAR CONTA MARIBONE";
+        }
+
+      });
+  </script>
 
 </body>
 </html>
