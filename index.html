@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -26,7 +27,7 @@
       width: 100%;
       max-width: 420px;
       padding: 30px;
-      background: #ffffff;
+      background: #fff;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     }
@@ -217,58 +218,114 @@
   </main>
 
   <script>
-    document
-      .getElementById("cadastroForm")
-      .addEventListener("submit", async function(event) {
+
+    const formulario =
+      document.getElementById("cadastroForm");
+
+    const botao =
+      document.getElementById("botaoCadastro");
+
+    formulario.addEventListener(
+      "submit",
+      async function(event) {
 
         event.preventDefault();
 
+        console.log(
+          "MARIBONE: formulário enviado."
+        );
+
         const nome =
-          document.getElementById("nome").value.trim();
+          document
+            .getElementById("nome")
+            .value
+            .trim();
 
         const sobrenome =
-          document.getElementById("sobrenome").value.trim();
+          document
+            .getElementById("sobrenome")
+            .value
+            .trim();
 
         const email =
-          document.getElementById("email").value.trim();
+          document
+            .getElementById("email")
+            .value
+            .trim()
+            .toLowerCase();
 
         const senha =
-          document.getElementById("senha").value;
+          document
+            .getElementById("senha")
+            .value;
 
         const confirmarSenha =
-          document.getElementById("confirmarSenha").value;
+          document
+            .getElementById("confirmarSenha")
+            .value;
 
         if (senha !== confirmarSenha) {
-          alert("As senhas não coincidem.");
+
+          alert(
+            "As senhas não coincidem."
+          );
+
           return;
         }
 
-        const botao =
-          document.getElementById("botaoCadastro");
+        if (senha.length < 8) {
+
+          alert(
+            "A senha deve possuir pelo menos 8 caracteres."
+          );
+
+          return;
+        }
 
         botao.disabled = true;
-        botao.textContent = "CRIANDO CONTA...";
+
+        botao.textContent =
+          "CRIANDO CONTA...";
 
         try {
 
-          const resposta = await fetch(
-            "https://api.maribone.com.br/auth/register",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({
-                nome: nome,
-                sobrenome: sobrenome,
-                email: email,
-                senha: senha
-              })
-            }
+          console.log(
+            "MARIBONE: enviando cadastro para API..."
+          );
+
+          const resposta =
+            await fetch(
+              "https://api.maribone.com.br/auth/register",
+              {
+                method: "POST",
+
+                headers: {
+                  "Content-Type":
+                    "application/json"
+                },
+
+                body:
+                  JSON.stringify({
+                    nome: nome,
+                    sobrenome: sobrenome,
+                    email: email,
+                    senha: senha
+                  })
+              }
+            );
+
+          console.log(
+            "MARIBONE: resposta recebida.",
+            resposta.status
           );
 
           const resultado =
             await resposta.json();
+
+          console.log(
+            "MARIBONE: resultado:",
+            resultado
+          );
 
           if (resultado.success) {
 
@@ -276,36 +333,41 @@
               "Conta Maribone criada com sucesso!"
             );
 
-            event.target.reset();
+            formulario.reset();
 
           } else {
 
             alert(
               resultado.error ||
-              "Não foi possível criar sua conta."
+              "Não foi possível criar a conta."
             );
           }
 
         } catch (erro) {
 
           console.error(
-            "Erro no cadastro:",
+            "MARIBONE: erro de conexão:",
             erro
           );
 
           alert(
-            "Não foi possível conectar ao servidor. Tente novamente."
+            "Não foi possível conectar ao servidor.\n\n" +
+            "Abra o F12 → Console para ver o diagnóstico."
           );
 
         } finally {
 
           botao.disabled = false;
+
           botao.textContent =
             "CRIAR CONTA MARIBONE";
         }
 
-      });
+      }
+    );
+
   </script>
 
 </body>
 </html>
+```
