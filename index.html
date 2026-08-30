@@ -207,21 +207,107 @@
 
   </main>
 
-  <script>
-    document.getElementById("cadastroForm").addEventListener("submit", function(event) {
+ ```html
+<script>
+  document
+    .getElementById("cadastroForm")
+    .addEventListener("submit", async function(event) {
+
       event.preventDefault();
 
-      const senha = document.getElementById("senha").value;
-      const confirmarSenha = document.getElementById("confirmarSenha").value;
+      const nome =
+        document.getElementById("nome").value.trim();
 
+      const sobrenome =
+        document.getElementById("sobrenome").value.trim();
+
+      const email =
+        document.getElementById("email").value.trim();
+
+      const senha =
+        document.getElementById("senha").value;
+
+      const confirmarSenha =
+        document.getElementById("confirmarSenha").value;
+
+      // Verifica as senhas
       if (senha !== confirmarSenha) {
         alert("As senhas não coincidem.");
         return;
       }
 
-      alert("Formulário pronto. A conexão com a API será configurada na próxima etapa.");
+      // Desativa o botão durante o cadastro
+      const botao =
+        event.target.querySelector("button");
+
+      botao.disabled = true;
+      botao.textContent = "CRIANDO CONTA...";
+
+      try {
+
+        const resposta = await fetch(
+          "https://api.maribone.com.br/auth/register",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+              nome: nome,
+              sobrenome: sobrenome,
+              email: email,
+              senha: senha
+            })
+          }
+        );
+
+        const resultado =
+          await resposta.json();
+
+        if (resultado.success) {
+
+          alert(
+            "Conta Maribone criada com sucesso!"
+          );
+
+          /*
+           * POR ENQUANTO NÃO REDIRECIONAMOS.
+           *
+           * Depois vamos colocar aqui a página
+           * de oferta dos planos.
+           */
+
+          event.target.reset();
+
+        } else {
+
+          alert(
+            resultado.error ||
+            "Não foi possível criar sua conta."
+          );
+        }
+
+      } catch (erro) {
+
+        console.error(erro);
+
+        alert(
+          "Não foi possível conectar ao servidor. Tente novamente."
+        );
+
+      } finally {
+
+        botao.disabled = false;
+        botao.textContent =
+          "CRIAR CONTA MARIBONE";
+      }
+
     });
-  </script>
+</script>
+```
+
 
 </body>
 </html>
