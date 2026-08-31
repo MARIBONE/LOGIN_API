@@ -1,0 +1,1443 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planos — Maribone</title>
+
+<style>
+:root{
+    --bg:#07090d;
+    --bg2:#0c1017;
+    --card:#11161f;
+    --card2:#151b25;
+    --border:#252d3a;
+    --text:#f5f7fa;
+    --muted:#8d98a8;
+    --primary:#ffffff;
+    --accent:#7c5cff;
+    --accent2:#a78bfa;
+    --success:#45d483;
+    --danger:#ff6577;
+    --shadow:0 25px 80px rgba(0,0,0,.35);
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:
+        radial-gradient(circle at 50% -10%,rgba(124,92,255,.18),transparent 35%),
+        radial-gradient(circle at 90% 30%,rgba(72,90,255,.08),transparent 30%),
+        var(--bg);
+    color:var(--text);
+    min-height:100vh;
+}
+
+button{
+    font:inherit;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+    position:sticky;
+    top:0;
+    z-index:100;
+    height:74px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 6%;
+    background:rgba(7,9,13,.78);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    font-weight:800;
+    letter-spacing:-.5px;
+}
+
+.logo-mark{
+    width:34px;
+    height:34px;
+    border-radius:10px;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg,#fff,#a8b0bd);
+    color:#080a0e;
+    font-weight:900;
+}
+
+.nav{
+    display:flex;
+    align-items:center;
+    gap:28px;
+    color:var(--muted);
+    font-size:14px;
+}
+
+.nav a:hover{
+    color:white;
+}
+
+.header-actions{
+    display:flex;
+    gap:10px;
+}
+
+.btn{
+    border:1px solid var(--border);
+    background:#11161f;
+    color:white;
+    border-radius:10px;
+    padding:11px 18px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+    border-color:#465064;
+}
+
+.btn-primary{
+    background:white;
+    color:#090b10;
+    border-color:white;
+    font-weight:700;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    text-align:center;
+    padding:95px 20px 55px;
+    max-width:1000px;
+    margin:auto;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    border:1px solid rgba(124,92,255,.35);
+    background:rgba(124,92,255,.08);
+    color:#c7bbff;
+    padding:7px 13px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:700;
+    margin-bottom:22px;
+}
+
+.badge-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--accent2);
+    box-shadow:0 0 12px var(--accent);
+}
+
+.hero h1{
+    font-size:clamp(40px,7vw,76px);
+    line-height:.98;
+    letter-spacing:-4px;
+    max-width:850px;
+    margin:auto;
+}
+
+.hero h1 span{
+    background:linear-gradient(90deg,#fff,#9c8cff);
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.hero p{
+    color:var(--muted);
+    font-size:18px;
+    line-height:1.6;
+    max-width:650px;
+    margin:25px auto 0;
+}
+
+/* =========================
+   BILLING
+========================= */
+
+.billing{
+    display:flex;
+    justify-content:center;
+    margin:25px 0 45px;
+}
+
+.billing-box{
+    display:flex;
+    padding:5px;
+    border:1px solid var(--border);
+    background:#0e131b;
+    border-radius:12px;
+}
+
+.billing-option{
+    border:0;
+    background:transparent;
+    color:var(--muted);
+    padding:10px 20px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.billing-option.active{
+    background:white;
+    color:#080a0e;
+    font-weight:700;
+}
+
+.discount{
+    color:var(--success);
+    font-size:11px;
+    margin-left:5px;
+}
+
+/* =========================
+   PLANS
+========================= */
+
+.plans{
+    width:min(1200px,92%);
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.plan{
+    position:relative;
+    background:
+        linear-gradient(180deg,rgba(255,255,255,.035),transparent),
+        var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:30px;
+    min-height:590px;
+    display:flex;
+    flex-direction:column;
+    transition:.25s;
+}
+
+.plan:hover{
+    transform:translateY(-5px);
+    border-color:#3a4455;
+    box-shadow:var(--shadow);
+}
+
+.plan.featured{
+    border-color:rgba(124,92,255,.7);
+    box-shadow:
+        0 0 0 1px rgba(124,92,255,.15),
+        0 25px 90px rgba(75,55,180,.15);
+}
+
+.featured-label{
+    position:absolute;
+    top:-13px;
+    left:25px;
+    background:linear-gradient(90deg,#7254ff,#9a7cff);
+    padding:6px 13px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.7px;
+}
+
+.plan-name{
+    font-size:14px;
+    color:#aeb7c5;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.plan-description{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+    margin-top:9px;
+    min-height:40px;
+}
+
+.price{
+    display:flex;
+    align-items:flex-end;
+    gap:5px;
+    margin:25px 0 5px;
+}
+
+.price strong{
+    font-size:48px;
+    letter-spacing:-3px;
+}
+
+.price small{
+    color:var(--muted);
+    margin-bottom:9px;
+}
+
+.price-note{
+    font-size:11px;
+    color:#6f7988;
+    min-height:17px;
+}
+
+.plan-button{
+    width:100%;
+    margin:22px 0 25px;
+    padding:13px;
+    border-radius:10px;
+    border:1px solid #303846;
+    background:#171d27;
+    color:white;
+    cursor:pointer;
+    font-weight:700;
+    transition:.2s;
+}
+
+.plan-button:hover{
+    background:#202735;
+}
+
+.plan.featured .plan-button{
+    background:white;
+    color:#080a0e;
+    border-color:white;
+}
+
+.plan-divider{
+    height:1px;
+    background:var(--border);
+    margin-bottom:22px;
+}
+
+.feature-title{
+    font-size:12px;
+    color:#9da7b6;
+    margin-bottom:14px;
+    font-weight:700;
+}
+
+.features{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.features li{
+    font-size:13px;
+    color:#c8ced7;
+    display:flex;
+    gap:10px;
+    line-height:1.35;
+}
+
+.check{
+    color:var(--success);
+    font-weight:900;
+}
+
+.lock{
+    color:#657080;
+}
+
+/* =========================
+   COMPARISON
+========================= */
+
+.section{
+    width:min(1100px,92%);
+    margin:110px auto 0;
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:38px;
+}
+
+.section-title h2{
+    font-size:35px;
+    letter-spacing:-1.5px;
+}
+
+.section-title p{
+    color:var(--muted);
+    margin-top:9px;
+}
+
+.table-wrap{
+    overflow-x:auto;
+    border:1px solid var(--border);
+    border-radius:18px;
+}
+
+.compare{
+    width:100%;
+    min-width:700px;
+    border-collapse:collapse;
+}
+
+.compare th,
+.compare td{
+    padding:17px 20px;
+    text-align:center;
+    border-bottom:1px solid var(--border);
+    font-size:13px;
+}
+
+.compare th:first-child,
+.compare td:first-child{
+    text-align:left;
+}
+
+.compare th{
+    background:#10151e;
+    color:white;
+}
+
+.compare td{
+    color:#b4bdca;
+}
+
+.compare tr:last-child td{
+    border-bottom:0;
+}
+
+.yes{
+    color:var(--success);
+    font-weight:800;
+}
+
+.no{
+    color:#596271;
+}
+
+/* =========================
+   TRUST
+========================= */
+
+.trust{
+    width:min(1100px,92%);
+    margin:70px auto 0;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.trust-card{
+    padding:24px;
+    border:1px solid var(--border);
+    background:#0d1219;
+    border-radius:16px;
+}
+
+.trust-icon{
+    font-size:24px;
+    margin-bottom:15px;
+}
+
+.trust-card h3{
+    font-size:15px;
+    margin-bottom:7px;
+}
+
+.trust-card p{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+}
+
+/* =========================
+   FAQ
+========================= */
+
+.faq{
+    width:min(800px,92%);
+    margin:100px auto;
+}
+
+.faq-item{
+    border-bottom:1px solid var(--border);
+}
+
+.faq-question{
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:none;
+    border:0;
+    color:white;
+    padding:22px 5px;
+    cursor:pointer;
+    text-align:left;
+    font-weight:600;
+}
+
+.faq-plus{
+    font-size:22px;
+    color:var(--muted);
+    transition:.2s;
+}
+
+.faq-answer{
+    max-height:0;
+    overflow:hidden;
+    transition:.3s ease;
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.7;
+}
+
+.faq-item.open .faq-answer{
+    max-height:200px;
+    padding:0 5px 22px;
+}
+
+.faq-item.open .faq-plus{
+    transform:rotate(45deg);
+}
+
+/* =========================
+   CTA
+========================= */
+
+.cta{
+    width:min(1050px,92%);
+    margin:30px auto 100px;
+    padding:65px 30px;
+    text-align:center;
+    border-radius:25px;
+    border:1px solid var(--border);
+    background:
+        radial-gradient(circle at center,rgba(124,92,255,.15),transparent 55%),
+        #0d1219;
+}
+
+.cta h2{
+    font-size:38px;
+    letter-spacing:-1.5px;
+}
+
+.cta p{
+    color:var(--muted);
+    margin:12px auto 25px;
+}
+
+.cta button{
+    padding:13px 24px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    border-top:1px solid var(--border);
+    padding:30px 6%;
+    display:flex;
+    justify-content:space-between;
+    color:#667080;
+    font-size:12px;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.72);
+    backdrop-filter:blur(8px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:500;
+    padding:20px;
+}
+
+.modal-overlay.show{
+    display:flex;
+}
+
+.modal{
+    width:min(470px,100%);
+    background:#11161f;
+    border:1px solid #303947;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 30px 100px rgba(0,0,0,.6);
+    animation:modalIn .2s ease;
+}
+
+@keyframes modalIn{
+    from{
+        opacity:0;
+        transform:translateY(12px) scale(.98);
+    }
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+.modal-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.modal h3{
+    font-size:22px;
+}
+
+.close{
+    background:none;
+    border:0;
+    color:#8b95a5;
+    font-size:24px;
+    cursor:pointer;
+}
+
+.modal p{
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.6;
+    margin:18px 0;
+}
+
+.selected-plan{
+    padding:16px;
+    border:1px solid var(--border);
+    background:#0b1017;
+    border-radius:12px;
+    margin-bottom:20px;
+}
+
+.selected-plan strong{
+    display:block;
+    margin-bottom:4px;
+}
+
+.modal-actions{
+    display:flex;
+    gap:10px;
+}
+
+.modal-actions button{
+    flex:1;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+    .plans{
+        grid-template-columns:1fr;
+        max-width:550px;
+    }
+
+    .plan{
+        min-height:auto;
+    }
+
+    .trust{
+        grid-template-columns:1fr;
+    }
+
+    .nav{
+        display:none;
+    }
+}
+
+@media(max-width:600px){
+
+    .header{
+        padding:0 20px;
+    }
+
+    .header-actions .btn:first-child{
+        display:none;
+    }
+
+    .hero{
+        padding-top:65px;
+    }
+
+    .hero h1{
+        letter-spacing:-2px;
+    }
+
+    .hero p{
+        font-size:15px;
+    }
+
+    .billing-box{
+        width:100%;
+        justify-content:center;
+    }
+
+    .billing-option{
+        flex:1;
+        padding:10px 8px;
+    }
+
+    footer{
+        flex-direction:column;
+        gap:10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <a href="#" class="logo">
+        <div class="logo-mark">M</div>
+        <span>MARIBONE</span>
+    </a>
+
+    <nav class="nav">
+        <a href="#planos">Planos</a>
+        <a href="#comparacao">Comparação</a>
+        <a href="#faq">FAQ</a>
+    </nav>
+
+    <div class="header-actions">
+        <button class="btn" onclick="irLogin()">Entrar</button>
+        <button class="btn btn-primary" onclick="scrollPlanos()">Ver planos</button>
+    </div>
+
+</header>
+
+
+<main>
+
+<section class="hero">
+
+    <div class="badge">
+        <span class="badge-dot"></span>
+        ECOSSISTEMA MARIBONE
+    </div>
+
+    <h1>
+        Um plano para cada
+        <span>nível de operação.</span>
+    </h1>
+
+    <p>
+        Escolha a estrutura Maribone que melhor corresponde
+        ao seu momento. Comece simples e evolua quando
+        sua operação crescer.
+    </p>
+
+</section>
+
+
+<div class="billing">
+
+    <div class="billing-box">
+
+        <button
+            class="billing-option active"
+            id="monthlyBtn"
+            onclick="setBilling('monthly')">
+            Mensal
+        </button>
+
+        <button
+            class="billing-option"
+            id="annualBtn"
+            onclick="setBilling('annual')">
+            Anual
+            <span class="discount">-20%</span>
+        </button>
+
+    </div>
+
+</div>
+
+
+<section class="plans" id="planos">
+
+    <!-- MARIBONE -->
+
+    <article class="plan">
+
+        <div class="plan-name">
+            Maribone
+        </div>
+
+        <div class="plan-description">
+            Para quem deseja organizar sua rotina digital.
+        </div>
+
+        <div class="price">
+            <strong
+                class="price-value"
+                data-monthly="15"
+                data-annual="12">
+                R$15
+            </strong>
+            <small>/mês</small>
+        </div>
+
+        <div class="price-note">
+            Acesso ao ecossistema básico.
+        </div>
+
+        <button
+            class="plan-button"
+            onclick="selecionarPlano('Maribone')">
+            Escolher Maribone
+        </button>
+
+        <div class="plan-divider"></div>
+
+        <div class="feature-title">
+            INCLUI
+        </div>
+
+        <ul class="features">
+            <li><span class="check">✓</span> Agenda Maribone</li>
+            <li><span class="check">✓</span> Editor Maribone</li>
+            <li><span class="check">✓</span> Conta pessoal</li>
+            <li><span class="check">✓</span> Salvamento de dados</li>
+            <li><span class="check">✓</span> Acesso multiplataforma</li>
+            <li><span class="lock">—</span> Maribone Reports</li>
+            <li><span class="lock">—</span> Correspondência física</li>
+        </ul>
+
+    </article>
+
+
+    <!-- PRO -->
+
+    <article class="plan featured">
+
+        <div class="featured-label">
+            Mais escolhido
+        </div>
+
+        <div class="plan-name">
+            Maribone Pro
+        </div>
+
+        <div class="plan-description">
+            Para usuários que precisam de uma operação mais completa.
+        </div>
+
+        <div class="price">
+            <strong
+                class="price-value"
+                data-monthly="25"
+                data-annual="20">
+                R$25
+            </strong>
+            <small>/mês</small>
+        </div>
+
+        <div class="price-note">
+            Mais recursos e acompanhamento.
+        </div>
+
+        <button
+            class="plan-button"
+            onclick="selecionarPlano('Maribone Pro')">
+            Escolher Pro
+        </button>
+
+        <div class="plan-divider"></div>
+
+        <div class="feature-title">
+            TUDO DO MARIBONE + 
+        </div>
+
+        <ul class="features">
+            <li><span class="check">✓</span> Maribone Reports</li>
+            <li><span class="check">✓</span> Relatórios por e-mail</li>
+            <li><span class="check">✓</span> Notificações SMS</li>
+            <li><span class="check">✓</span> Recursos Pro</li>
+            <li><span class="check">✓</span> Prioridade de processamento</li>
+            <li><span class="check">✓</span> Histórico ampliado</li>
+            <li><span class="check">✓</span> Recursos futuros Pro</li>
+        </ul>
+
+    </article>
+
+
+    <!-- ID -->
+
+    <article class="plan">
+
+        <div class="plan-name">
+            Maribone ID
+        </div>
+
+        <div class="plan-description">
+            A camada premium de identidade e relacionamento.
+        </div>
+
+        <div class="price">
+            <strong
+                class="price-value"
+                data-monthly="135"
+                data-annual="108">
+                R$135
+            </strong>
+            <small>/mês</small>
+        </div>
+
+        <div class="price-note">
+            Inclui benefícios físicos trimestrais.
+        </div>
+
+        <button
+            class="plan-button"
+            onclick="selecionarPlano('Maribone ID')">
+            Escolher ID
+        </button>
+
+        <div class="plan-divider"></div>
+
+        <div class="feature-title">
+            EXPERIÊNCIA MARIBONE
+        </div>
+
+        <ul class="features">
+            <li><span class="check">✓</span> Tudo do Maribone Pro</li>
+            <li><span class="check">✓</span> Identidade Maribone ID</li>
+            <li><span class="check">✓</span> Correspondência física</li>
+            <li><span class="check">✓</span> Envio trimestral</li>
+            <li><span class="check">✓</span> Benefícios exclusivos</li>
+            <li><span class="check">✓</span> Experiências especiais</li>
+            <li><span class="check">✓</span> Recursos futuros ID</li>
+        </ul>
+
+    </article>
+
+</section>
+
+
+<section class="section" id="comparacao">
+
+    <div class="section-title">
+        <h2>Compare os planos</h2>
+        <p>Uma visão objetiva de cada camada do ecossistema.</p>
+    </div>
+
+    <div class="table-wrap">
+
+        <table class="compare">
+
+            <thead>
+                <tr>
+                    <th>Recurso</th>
+                    <th>Maribone</th>
+                    <th>Pro</th>
+                    <th>ID</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>Agenda Maribone</td>
+                    <td class="yes">✓</td>
+                    <td class="yes">✓</td>
+                    <td class="yes">✓</td>
+                </tr>
+
+                <tr>
+                    <td>Editor Maribone</td>
+                    <td class="yes">✓</td>
+                    <td class="yes">✓</td>
+                    <td class="yes">✓</td>
+                </tr>
+
+                <tr>
+                    <td>Conta Maribone</td>
+                    <td class="yes">✓</td>
+                    <td class="yes">✓</td>
+                    <td class="yes">✓</td>
+                </tr>
+
+                <tr>
+                    <td>Maribone Reports</td>
+                    <td class="no">—</td>
+                    <td class="yes">✓</td>
+                    <td class="yes">✓</td>
+                </tr>
+
+                <tr>
+                    <td>Relatórios por e-mail</td>
+                    <td class="no">—</td>
+                    <td class="yes">✓</td>
+                    <td class="yes">✓</td>
+                </tr>
+
+                <tr>
+                    <td>Notificações SMS</td>
+                    <td class="no">—</td>
+                    <td class="yes">✓</td>
+                    <td class="yes">✓</td>
+                </tr>
+
+                <tr>
+                    <td>Correspondência física</td>
+                    <td class="no">—</td>
+                    <td class="no">—</td>
+                    <td class="yes">✓</td>
+                </tr>
+
+                <tr>
+                    <td>Benefícios exclusivos</td>
+                    <td class="no">—</td>
+                    <td class="no">—</td>
+                    <td class="yes">✓</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<section class="trust">
+
+    <div class="trust-card">
+        <div class="trust-icon">🔐</div>
+        <h3>Controle da sua conta</h3>
+        <p>
+            Seus recursos ficam associados à sua conta
+            Maribone e podem evoluir junto com seu plano.
+        </p>
+    </div>
+
+    <div class="trust-card">
+        <div class="trust-icon">⚡</div>
+        <h3>Ativação simples</h3>
+        <p>
+            Escolha seu plano e avance para a etapa
+            de contratação sem complicações.
+        </p>
+    </div>
+
+    <div class="trust-card">
+        <div class="trust-icon">📊</div>
+        <h3>Ecossistema integrado</h3>
+        <p>
+            Agenda, Editor e Reports fazem parte
+            da mesma estrutura Maribone.
+        </p>
+    </div>
+
+</section>
+
+
+<section class="faq" id="faq">
+
+    <div class="section-title">
+        <h2>Perguntas frequentes</h2>
+        <p>Informações essenciais antes de escolher.</p>
+    </div>
+
+
+    <div class="faq-item">
+
+        <button class="faq-question">
+            Posso mudar de plano depois?
+            <span class="faq-plus">+</span>
+        </button>
+
+        <div class="faq-answer">
+            Sim. A estrutura foi pensada para permitir
+            que sua conta evolua para outro plano conforme
+            suas necessidades.
+        </div>
+
+    </div>
+
+
+    <div class="faq-item">
+
+        <button class="faq-question">
+            O plano Maribone possui os recursos básicos?
+            <span class="faq-plus">+</span>
+        </button>
+
+        <div class="faq-answer">
+            Sim. O plano Maribone fornece acesso aos
+            principais recursos do ecossistema, incluindo
+            Agenda e Editor.
+        </div>
+
+    </div>
+
+
+    <div class="faq-item">
+
+        <button class="faq-question">
+            O que diferencia o Pro?
+            <span class="faq-plus">+</span>
+        </button>
+
+        <div class="faq-answer">
+            O Pro adiciona recursos de acompanhamento,
+            relatórios e notificações, tornando-o adequado
+            para uma utilização mais avançada.
+        </div>
+
+    </div>
+
+
+    <div class="faq-item">
+
+        <button class="faq-question">
+            O que é o Maribone ID?
+            <span class="faq-plus">+</span>
+        </button>
+
+        <div class="faq-answer">
+            É a camada premium do ecossistema, combinando
+            os recursos Pro com benefícios exclusivos e
+            correspondência física trimestral.
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="cta">
+
+    <h2>Seu ecossistema começa aqui.</h2>
+
+    <p>
+        Escolha a estrutura que corresponde ao seu momento.
+    </p>
+
+    <button
+        class="btn btn-primary"
+        onclick="scrollPlanos()">
+        Ver planos
+    </button>
+
+</section>
+
+</main>
+
+
+<footer>
+
+    <div>
+        © 2026 Maribone Tecnologia
+    </div>
+
+    <div>
+        Planos · Conta · Privacidade
+    </div>
+
+</footer>
+
+
+<!-- MODAL -->
+
+<div
+    class="modal-overlay"
+    id="modal">
+
+    <div class="modal">
+
+        <div class="modal-top">
+
+            <h3>Confirmar plano</h3>
+
+            <button
+                class="close"
+                onclick="fecharModal()">
+                ×
+            </button>
+
+        </div>
+
+        <p>
+            Você selecionou o seguinte plano para sua
+            conta Maribone:
+        </p>
+
+        <div class="selected-plan">
+
+            <strong id="selectedPlan">
+                Maribone
+            </strong>
+
+            <span id="selectedPrice">
+                R$15/mês
+            </span>
+
+        </div>
+
+        <div class="modal-actions">
+
+            <button
+                class="btn"
+                onclick="fecharModal()">
+                Voltar
+            </button>
+
+            <button
+                class="btn btn-primary"
+                onclick="continuarCadastro()">
+                Continuar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   ESTADO
+========================= */
+
+let billing = "monthly";
+let planoSelecionado = "";
+
+
+/* =========================
+   COBRANÇA
+========================= */
+
+function setBilling(tipo){
+
+    billing = tipo;
+
+    document
+        .getElementById("monthlyBtn")
+        .classList
+        .toggle("active", tipo === "monthly");
+
+    document
+        .getElementById("annualBtn")
+        .classList
+        .toggle("active", tipo === "annual");
+
+
+    document
+        .querySelectorAll(".price-value")
+        .forEach(el => {
+
+            const valor = tipo === "monthly"
+                ? el.dataset.monthly
+                : el.dataset.annual;
+
+            el.textContent = "R$" + valor;
+
+        });
+
+}
+
+
+/* =========================
+   SELEÇÃO DO PLANO
+========================= */
+
+function selecionarPlano(plano){
+
+    planoSelecionado = plano;
+
+    const precos = {
+
+        "Maribone":{
+            monthly:"R$15/mês",
+            annual:"R$12/mês"
+        },
+
+        "Maribone Pro":{
+            monthly:"R$25/mês",
+            annual:"R$20/mês"
+        },
+
+        "Maribone ID":{
+            monthly:"R$135/mês",
+            annual:"R$108/mês"
+        }
+
+    };
+
+    document
+        .getElementById("selectedPlan")
+        .textContent = plano;
+
+    document
+        .getElementById("selectedPrice")
+        .textContent = precos[plano][billing];
+
+    document
+        .getElementById("modal")
+        .classList
+        .add("show");
+
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+function fecharModal(){
+
+    document
+        .getElementById("modal")
+        .classList
+        .remove("show");
+
+}
+
+
+document
+    .getElementById("modal")
+    .addEventListener("click", function(e){
+
+        if(e.target === this){
+            fecharModal();
+        }
+
+    });
+
+
+/* =========================
+   CONTINUAR
+========================= */
+
+function continuarCadastro(){
+
+    /*
+       Aqui entra posteriormente a integração
+       com o fluxo real de contratação.
+
+       Exemplo futuro:
+
+       window.location.href =
+       "https://login.maribone.com.br/cadastro?plano="
+       + encodeURIComponent(planoSelecionado)
+       + "&periodicidade="
+       + billing;
+    */
+
+    alert(
+        "Plano selecionado: "
+        + planoSelecionado
+        + "\\nPeriodicidade: "
+        + (billing === "monthly" ? "Mensal" : "Anual")
+        + "\\n\\nA próxima etapa será integrada ao sistema de cadastro."
+    );
+
+}
+
+
+/* =========================
+   NAVEGAÇÃO
+========================= */
+
+function scrollPlanos(){
+
+    document
+        .getElementById("planos")
+        .scrollIntoView({
+            behavior:"smooth"
+        });
+
+}
+
+
+function irLogin(){
+
+    window.location.href =
+        "https://login.maribone.com.br";
+
+}
+
+
+/* =========================
+   FAQ
+========================= */
+
+document
+    .querySelectorAll(".faq-question")
+    .forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            const item =
+                button.parentElement;
+
+            item.classList.toggle("open");
+
+        });
+
+    });
+
+
+/* =========================
+   ESC PARA FECHAR MODAL
+========================= */
+
+document.addEventListener("keydown", e => {
+
+    if(e.key === "Escape"){
+        fecharModal();
+    }
+
+});
+
+</script>
+
+</body>
+</html>
+```
