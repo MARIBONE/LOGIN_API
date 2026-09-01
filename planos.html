@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -43,7 +42,8 @@ body{
     min-height:100vh;
 }
 
-button{
+button,
+input{
     font:inherit;
 }
 
@@ -644,12 +644,39 @@ footer{
     border:1px solid var(--border);
     background:#0b1017;
     border-radius:12px;
-    margin-bottom:20px;
+    margin-bottom:15px;
 }
 
 .selected-plan strong{
     display:block;
     margin-bottom:4px;
+}
+
+.email-label{
+    display:block;
+    color:#aeb7c5;
+    font-size:12px;
+    font-weight:700;
+    margin-bottom:7px;
+}
+
+.email-input{
+    width:100%;
+    padding:13px;
+    border-radius:10px;
+    border:1px solid #303846;
+    background:#0b1017;
+    color:white;
+    outline:none;
+    margin-bottom:20px;
+}
+
+.email-input:focus{
+    border-color:#7c5cff;
+}
+
+.email-input::placeholder{
+    color:#596271;
 }
 
 .modal-actions{
@@ -659,6 +686,17 @@ footer{
 
 .modal-actions button{
     flex:1;
+}
+
+.modal-message{
+    display:none;
+    font-size:12px;
+    color:var(--danger);
+    margin:-10px 0 15px;
+}
+
+.modal-message.show{
+    display:block;
 }
 
 /* =========================
@@ -747,7 +785,6 @@ footer{
 
 </header>
 
-
 <main>
 
 <section class="hero">
@@ -769,7 +806,6 @@ footer{
     </p>
 
 </section>
-
 
 <div class="billing">
 
@@ -793,7 +829,6 @@ footer{
     </div>
 
 </div>
-
 
 <section class="plans" id="planos">
 
@@ -887,7 +922,7 @@ footer{
         <div class="plan-divider"></div>
 
         <div class="feature-title">
-            TUDO DO MARIBONE + 
+            TUDO DO MARIBONE +
         </div>
 
         <ul class="features">
@@ -1082,7 +1117,6 @@ footer{
         <p>Informações essenciais antes de escolher.</p>
     </div>
 
-
     <div class="faq-item">
 
         <button class="faq-question">
@@ -1181,7 +1215,9 @@ footer{
 </footer>
 
 
-<!-- MODAL -->
+<!-- =========================
+     MODAL
+========================= -->
 
 <div
     class="modal-overlay"
@@ -1218,6 +1254,25 @@ footer{
 
         </div>
 
+        <label
+            class="email-label"
+            for="emailPagamento">
+            E-MAIL PARA PAGAMENTO
+        </label>
+
+        <input
+            type="email"
+            id="emailPagamento"
+            class="email-input"
+            placeholder="seu@email.com"
+            autocomplete="email"
+        >
+
+        <div
+            id="modalMessage"
+            class="modal-message">
+        </div>
+
         <div class="modal-actions">
 
             <button
@@ -1228,6 +1283,7 @@ footer{
 
             <button
                 class="btn btn-primary"
+                id="continuarBtn"
                 onclick="continuarCadastro()">
                 Continuar
             </button>
@@ -1267,14 +1323,14 @@ function setBilling(tipo){
         .classList
         .toggle("active", tipo === "annual");
 
-
     document
         .querySelectorAll(".price-value")
         .forEach(el => {
 
-            const valor = tipo === "monthly"
-                ? el.dataset.monthly
-                : el.dataset.annual;
+            const valor =
+                tipo === "monthly"
+                    ? el.dataset.monthly
+                    : el.dataset.annual;
 
             el.textContent = "R$" + valor;
 
@@ -1319,6 +1375,12 @@ function selecionarPlano(plano){
         .textContent = precos[plano][billing];
 
     document
+        .getElementById("emailPagamento")
+        .value = "";
+
+    esconderMensagem();
+
+    document
         .getElementById("modal")
         .classList
         .add("show");
@@ -1352,31 +1414,229 @@ document
 
 
 /* =========================
-   CONTINUAR
+   MENSAGEM DO MODAL
 ========================= */
 
-function continuarCadastro(){
+function mostrarMensagem(texto){
+
+    const mensagem =
+        document.getElementById("modalMessage");
+
+    mensagem.textContent = texto;
+
+    mensagem.classList.add("show");
+
+}
+
+
+function esconderMensagem(){
+
+    document
+        .getElementById("modalMessage")
+        .classList
+        .remove("show");
+
+}
+
+
+/* =========================
+   MERCADO PAGO
+========================= */
+
+async function continuarCadastro(){
+
+    esconderMensagem();
+
+    const email =
+        document
+            .getElementById("emailPagamento")
+            .value
+            .trim();
+
+    if(!email){
+
+        mostrarMensagem(
+            "Informe seu e-mail para continuar."
+        );
+
+        document
+            .getElementById("emailPagamento")
+            .focus();
+
+        return;
+    }
+
 
     /*
-       Aqui entra posteriormente a integração
-       com o fluxo real de contratação.
-
-       Exemplo futuro:
-
-       window.location.href =
-       "https://login.maribone.com.br/cadastro?plano="
-       + encodeURIComponent(planoSelecionado)
-       + "&periodicidade="
-       + billing;
+       Validação básica do e-mail.
     */
 
-    alert(
-        "Plano selecionado: "
-        + planoSelecionado
-        + "\\nPeriodicidade: "
-        + (billing === "monthly" ? "Mensal" : "Anual")
-        + "\\n\\nA próxima etapa será integrada ao sistema de cadastro."
-    );
+    const emailValido =
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    if(!emailValido){
+
+        mostrarMensagem(
+            "Informe um endereço de e-mail válido."
+        );
+
+        document
+            .getElementById("emailPagamento")
+            .focus();
+
+        return;
+    }
+
+
+    /*
+       O Worker atual aceita estes dois
+       identificadores de plano.
+    */
+
+    const planos = {
+
+        "Maribone":
+            "MARIBONE",
+
+        "Maribone Pro":
+            "PRO"
+
+    };
+
+
+    const planoAPI =
+        planos[planoSelecionado];
+
+
+    /*
+       Maribone ID ainda não está disponível
+       no endpoint atual.
+    */
+
+    if(!planoAPI){
+
+        mostrarMensagem(
+            "Este plano ainda não está disponível para contratação online."
+        );
+
+        return;
+    }
+
+
+    /*
+       O endpoint atual do Worker trabalha
+       com assinatura mensal.
+    */
+
+    if(billing !== "monthly"){
+
+        mostrarMensagem(
+            "A contratação anual ainda está sendo preparada. Selecione a opção mensal."
+        );
+
+        return;
+    }
+
+
+    const botao =
+        document.getElementById("continuarBtn");
+
+
+    botao.disabled = true;
+    botao.textContent = "Processando...";
+
+
+    try{
+
+        const resposta = await fetch(
+            "https://api.maribone.com.br/billing/subscription",
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body:JSON.stringify({
+
+                    email:
+                        email,
+
+                    plano:
+                        planoAPI
+
+                })
+
+            }
+        );
+
+
+        const dados =
+            await resposta.json();
+
+
+        console.log(
+            "Resposta da API Maribone:",
+            dados
+        );
+
+
+        if(
+            !resposta.ok ||
+            !dados.success
+        ){
+
+            console.error(
+                "Erro Mercado Pago:",
+                dados
+            );
+
+            mostrarMensagem(
+                dados.error ||
+                "Não foi possível iniciar a assinatura."
+            );
+
+            return;
+        }
+
+
+        /*
+           O Worker retorna o link
+           de checkout do Mercado Pago.
+        */
+
+        if(dados.checkout_url){
+
+            window.location.href =
+                dados.checkout_url;
+
+            return;
+        }
+
+
+        mostrarMensagem(
+            "A assinatura foi criada, mas o link de pagamento não foi recebido."
+        );
+
+
+    }catch(e){
+
+        console.error(
+            "Erro de conexão:",
+            e
+        );
+
+        mostrarMensagem(
+            "Não foi possível conectar ao servidor."
+        );
+
+    }finally{
+
+        botao.disabled = false;
+        botao.textContent = "Continuar";
+
+    }
 
 }
 
@@ -1412,14 +1672,17 @@ document
     .querySelectorAll(".faq-question")
     .forEach(button => {
 
-        button.addEventListener("click", () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-            const item =
-                button.parentElement;
+                const item =
+                    button.parentElement;
 
-            item.classList.toggle("open");
+                item.classList.toggle("open");
 
-        });
+            }
+        );
 
     });
 
@@ -1428,16 +1691,18 @@ document
    ESC PARA FECHAR MODAL
 ========================= */
 
-document.addEventListener("keydown", e => {
+document.addEventListener(
+    "keydown",
+    e => {
 
-    if(e.key === "Escape"){
-        fecharModal();
+        if(e.key === "Escape"){
+            fecharModal();
+        }
+
     }
-
-});
+);
 
 </script>
 
 </body>
 </html>
-```
